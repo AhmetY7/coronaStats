@@ -24,32 +24,74 @@ public class StatsDailyManager implements IStatsDailyService {
 	public List<StatsDaily> getAll() {
 		return this.statsDailyDal.getAll();
 	}
+	
+	@Override
+	public StatsDaily getById(int id) {
+		return this.getById(id);
+	}
 
 	@Override
 	@Transactional
-	public List<StatsDaily> getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<StatsDaily> getByCountryId(int countryId) {
+		return this.statsDailyDal.getByCountryId(countryId);
+	}
+	
+	@Override
+	@Transactional
+	public List<StatsDaily> worldwideTotal() {
+		return this.statsDailyDal.worldwideTotal();
+	}
+
+	@Override
+	@Transactional
+	public List<StatsDaily> countryTotal() {
+		return this.statsDailyDal.countryTotal();
+	}
+	
+	@Override
+	@Transactional
+	public List<StatsDaily> worldwideTotalDayByDay() {
+		List<StatsDaily> worldTotalDayByDay = this.statsDailyDal.worldwideTotalDayByDay();
+		for(int i=1; i < worldTotalDayByDay.size(); i++) {
+			worldTotalDayByDay.get(i).setInfected(worldTotalDayByDay.get(i-1).getInfected() + worldTotalDayByDay.get(i).getInfected());
+			worldTotalDayByDay.get(i).setRecovered(worldTotalDayByDay.get(i-1).getRecovered() + worldTotalDayByDay.get(i).getRecovered());
+			worldTotalDayByDay.get(i).setDeath(worldTotalDayByDay.get(i-1).getDeath() + worldTotalDayByDay.get(i).getDeath());
+		}
+		return worldTotalDayByDay;
+	}
+
+	@Override
+	@Transactional
+	public List<StatsDaily> countryTotalDayByDay() {
+		List<StatsDaily> countryDayByDay = this.statsDailyDal.countryTotalDayByDay();
+		for(int i=1; i < countryDayByDay.size(); i++) {
+			if(countryDayByDay.get(i).getCountryId() == countryDayByDay.get(i-1).getCountryId()) {
+				countryDayByDay.get(i).setInfected(countryDayByDay.get(i).getInfected() + countryDayByDay.get(i-1).getInfected());
+				countryDayByDay.get(i).setRecovered(countryDayByDay.get(i).getRecovered() + countryDayByDay.get(i-1).getRecovered());
+				countryDayByDay.get(i).setDeath(countryDayByDay.get(i).getDeath() + countryDayByDay.get(i-1).getDeath());
+			}
+		}
+		return countryDayByDay;
 	}
 
 	@Override
 	@Transactional
 	public void add(StatsDaily statsDaily) {
-		// TODO Auto-generated method stub
+		this.statsDailyDal.add(statsDaily);
 		
 	}
 
 	@Override
 	@Transactional
 	public void update(StatsDaily statsDaily) {
-		// TODO Auto-generated method stub
+		this.statsDailyDal.update(statsDaily);
 		
 	}
 
 	@Override
 	@Transactional
 	public void delete(StatsDaily statsDaily) {
-		// TODO Auto-generated method stub
+		this.statsDailyDal.delete(statsDaily);
 		
 	}
 

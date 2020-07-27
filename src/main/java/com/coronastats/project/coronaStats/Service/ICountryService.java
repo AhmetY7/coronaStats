@@ -6,4 +6,5 @@ import com.coronastats.project.coronaStats.Entities.Country;
 
 public interface ICountryService {
 	List<Country> getAll();
+	
 }
