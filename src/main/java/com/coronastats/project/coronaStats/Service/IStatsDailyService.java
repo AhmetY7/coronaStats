@@ -8,7 +8,7 @@ public interface IStatsDailyService {
 	List<StatsDaily> getAll();
 	List<StatsDaily> getByCountryId(int countryId);
 	
-	List<StatsDaily> worldwideTotal(); // dünya geneli selectbox için istatistikler
+	StatsDaily worldwideTotal(); // dünya geneli selectbox için istatistikler
 	List<StatsDaily> countryTotal(); // soldaki tablo için ve ortadaki tablo için
 	
 	// Alttaki çizelge için tam istenen tablolar değil ama istenene yakın bu nedenle tabloyu alıp kod ile düzenledik

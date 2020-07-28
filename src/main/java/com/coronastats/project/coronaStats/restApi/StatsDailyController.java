@@ -40,7 +40,7 @@ public class StatsDailyController {
 	}
 	
 	@GetMapping("/worldtotal")
-	public List<StatsDaily> worldwideTotal() {
+	public StatsDaily worldwideTotal() {
 		return this.statsDailyService.worldwideTotal();
 	}
 	

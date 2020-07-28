@@ -1,5 +1,7 @@
 package com.coronastats.project.coronaStats.DAL;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -32,7 +34,7 @@ public class HibernateStatsDailyDal implements IStatsDailyDal {
 	@Transactional
 	public StatsDaily getById(int id) {
 		Session session = entityManager.unwrap(Session.class);
-		StatsDaily statOfCountry = session.get(StatsDaily.class, id);
+		StatsDaily statOfCountry = session.createQuery("from StatsDaily s where s.id= :id", StatsDaily.class).setParameter("id", id).getSingleResult();
 		return statOfCountry;
 	}
 
@@ -46,9 +48,16 @@ public class HibernateStatsDailyDal implements IStatsDailyDal {
 	
 	@Override
 	@Transactional
-	public List<StatsDaily> worldwideTotal() {
+	public StatsDaily worldwideTotal() {
 		Session session = entityManager.unwrap(Session.class);
-		List<StatsDaily> worldTotal = session.createQuery("select s.id, s.countryId, s.date, SUM(s.infected) as infected,SUM(s.recovered) as recovered,SUM(s.death) as death from StatsDaily s", StatsDaily.class).getResultList();
+		Object[] worldTotalObject = session.createQuery("select s.id, s.countryId, s.date, SUM(s.infected), SUM(s.recovered), SUM(s.death) from StatsDaily s", Object[].class).getSingleResult();
+		StatsDaily worldTotal = new StatsDaily();
+		worldTotal.setId((int)worldTotalObject[0]);
+		worldTotal.setCountryId((int)worldTotalObject[1]);
+		worldTotal.setDate((Date)worldTotalObject[2]);
+		worldTotal.setInfected(((Long)worldTotalObject[3]).intValue());
+		worldTotal.setRecovered(((Long)worldTotalObject[4]).intValue());
+		worldTotal.setDeath(((Long)worldTotalObject[5]).intValue());
 		return worldTotal;
 	}
 
@@ -56,7 +65,19 @@ public class HibernateStatsDailyDal implements IStatsDailyDal {
 	@Transactional
 	public List<StatsDaily> countryTotal() {
 		Session session = entityManager.unwrap(Session.class);
-		List<StatsDaily> countryTotal = session.createQuery("select s.id, s.countryId, s.date, SUM(s.infected) as infected,SUM(s.recovered) as recovered,SUM(s.death) as death from StatsDaily s GROUP BY s.country_id ORDER BY s.infected DESC", StatsDaily.class).getResultList();
+		List<Object[]> countryTotalObject = session.createQuery("select s.id, s.countryId, s.date, SUM(s.infected) as infected,SUM(s.recovered) as recovered,SUM(s.death) as death from StatsDaily s GROUP BY s.countryId ORDER BY s.infected DESC", Object[].class).getResultList();
+		List<StatsDaily> countryTotal = new ArrayList<>();
+		for(Object[] row : countryTotalObject) {
+			System.out.println(row[0].getClass().getName() + "-" + row[1].getClass().getName() + "-" + row[2].getClass().getName() + "-" + row[3].getClass().getName() + "-" + row[4].getClass().getName() + "-" + row[5].getClass().getName());
+			StatsDaily stats = new StatsDaily();
+			stats.setId((int)row[0]);
+			stats.setCountryId((int)row[1]);
+			stats.setDate((Date)row[2]);
+			stats.setInfected(((Long)row[3]).intValue());
+			stats.setRecovered(((Long)row[4]).intValue());
+			stats.setDeath(((Long)row[5]).intValue());
+			countryTotal.add(stats);
+		}
 		return countryTotal;
 	}
 	
@@ -64,16 +85,38 @@ public class HibernateStatsDailyDal implements IStatsDailyDal {
 	@Transactional
 	public List<StatsDaily> worldwideTotalDayByDay() {
 		Session session = entityManager.unwrap(Session.class);
-		List<StatsDaily> worldDayByDayHelper = session.createQuery("select s.id, s.countryId, s.date, SUM(s.infected) as infected,SUM(s.recovered) as recovered,SUM(s.death) as death from Statsdaily s GROUP BY s.date ORDER BY s.date", StatsDaily.class).getResultList();
-		return worldDayByDayHelper;
+		List<Object[]> worldDayByDayHelper = session.createQuery("select s.id, s.countryId, s.date, SUM(s.infected) as infected,SUM(s.recovered) as recovered,SUM(s.death) as death from StatsDaily s GROUP BY s.date ORDER BY s.date", Object[].class).getResultList();
+		List<StatsDaily> worldDayByDay = new ArrayList<>();
+		for(Object[] row : worldDayByDayHelper) {
+			StatsDaily stats = new StatsDaily();
+			stats.setId((int)row[0]);
+			stats.setCountryId((int)row[1]);
+			stats.setDate((Date)row[2]);
+			stats.setInfected(((Long)row[3]).intValue());
+			stats.setRecovered(((Long)row[4]).intValue());
+			stats.setDeath(((Long)row[5]).intValue());
+			worldDayByDay.add(stats);
+		}
+		return worldDayByDay;
 	}
 
 	@Override
 	@Transactional
 	public List<StatsDaily> countryTotalDayByDay() {
 		Session session = entityManager.unwrap(Session.class);
-		List<StatsDaily> countryDayByDayHelper = session.createQuery("select s.id, s.countryId, s.date, SUM(s.infected) as infected,SUM(s.recovered) as recovered,SUM(s.death) as death from Statsdaily s GROUP BY s.country_id,s.date ORDER BY s.country_id", StatsDaily.class).getResultList();
-		return countryDayByDayHelper;
+		List<Object[]> countryDayByDayHelper = session.createQuery("select s.id, s.countryId, s.date, SUM(s.infected) as infected,SUM(s.recovered) as recovered,SUM(s.death) as death from StatsDaily s GROUP BY s.countryId,s.date ORDER BY s.countryId", Object[].class).getResultList();
+		List<StatsDaily> countryDayByDay = new ArrayList<>();
+		for(Object[] row : countryDayByDayHelper) {
+			StatsDaily stats = new StatsDaily();
+			stats.setId((int)row[0]);
+			stats.setCountryId((int)row[1]);
+			stats.setDate((Date)row[2]);
+			stats.setInfected(((Long)row[3]).intValue());
+			stats.setRecovered(((Long)row[4]).intValue());
+			stats.setDeath(((Long)row[5]).intValue());
+			countryDayByDay.add(stats);
+		}
+		return countryDayByDay;
 	}
 
 	@Override
@@ -94,7 +137,8 @@ public class HibernateStatsDailyDal implements IStatsDailyDal {
 	@Transactional
 	public void delete(StatsDaily statsDaily) {
 		Session session = entityManager.unwrap(Session.class);
-		session.delete(statsDaily);
+		StatsDaily statsToDelete = session.get(StatsDaily.class, statsDaily.getId());
+		session.delete(statsToDelete);
 	}
 
 }

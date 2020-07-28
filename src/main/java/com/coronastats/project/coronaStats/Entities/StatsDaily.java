@@ -43,6 +43,16 @@ public class StatsDaily {
 		this.death = death;
 	}
 	
+	public StatsDaily(Integer id, Integer countryId, Date date, Long infected, Long recovered, Long death) {
+		super();
+		this.id = id;
+		this.countryId = countryId;
+		this.date = date;
+		this.infected = infected.intValue();
+		this.recovered = recovered.intValue();
+		this.death = death.intValue();
+	}
+	
 	public StatsDaily() {
 		
 	}

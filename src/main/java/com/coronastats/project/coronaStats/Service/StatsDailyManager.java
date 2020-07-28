@@ -26,8 +26,9 @@ public class StatsDailyManager implements IStatsDailyService {
 	}
 	
 	@Override
+	@Transactional
 	public StatsDaily getById(int id) {
-		return this.getById(id);
+		return this.statsDailyDal.getById(id);
 	}
 
 	@Override
@@ -38,7 +39,7 @@ public class StatsDailyManager implements IStatsDailyService {
 	
 	@Override
 	@Transactional
-	public List<StatsDaily> worldwideTotal() {
+	public StatsDaily worldwideTotal() {
 		return this.statsDailyDal.worldwideTotal();
 	}
 
