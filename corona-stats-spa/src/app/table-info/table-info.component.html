@@ -1,0 +1,15 @@
+<p>Tablo</p>
+<table *ngIf="countries" >
+    <tr>
+        <td>ÜLKE</td>
+        <td>VAKA</td>
+        <td>ÖLÜM</td>
+        <td>İYİLEŞME</td>
+    </tr>
+    <tr *ngFor="let country of countriesTotal"> 
+        <td>{{countries[country.countryId-1].name}}</td>
+        <td>{{country.infected}}</td>
+        <td>{{country.death}}</td>
+        <td>{{country.recovered}}</td>
+    </tr>
+</table>

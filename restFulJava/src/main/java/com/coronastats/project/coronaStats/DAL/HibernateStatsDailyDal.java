@@ -68,7 +68,6 @@ public class HibernateStatsDailyDal implements IStatsDailyDal {
 		List<Object[]> countryTotalObject = session.createQuery("select s.id, s.countryId, s.date, SUM(s.infected) as infected,SUM(s.recovered) as recovered,SUM(s.death) as death from StatsDaily s GROUP BY s.countryId ORDER BY s.infected DESC", Object[].class).getResultList();
 		List<StatsDaily> countryTotal = new ArrayList<>();
 		for(Object[] row : countryTotalObject) {
-			System.out.println(row[0].getClass().getName() + "-" + row[1].getClass().getName() + "-" + row[2].getClass().getName() + "-" + row[3].getClass().getName() + "-" + row[4].getClass().getName() + "-" + row[5].getClass().getName());
 			StatsDaily stats = new StatsDaily();
 			stats.setId((int)row[0]);
 			stats.setCountryId((int)row[1]);

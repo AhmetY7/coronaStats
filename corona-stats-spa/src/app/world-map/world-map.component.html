@@ -1,0 +1,24 @@
+<div>
+    <p>Ülkelerin ve dünya geneli bilgilerinin haritada gösterimi</p>
+
+    <select *ngIf="countriesTotal && countries && wordlTotal" class='select-option'
+        #mySelect
+        (change)='onOptionsSelected(mySelect.value)'>
+        <option class='option' [value]="0"> Dünya Geneli </option>
+    <option class='option' 
+    *ngFor='let country of countries' 
+    [value]="country.id">{{country.name}}</option>
+    </select>
+    <p>{{ currentCountryName }}</p> <br/>
+    <p>vaka: {{ currentStats.infected }}</p>
+    <p>ölüm: {{ currentStats.death }}</p>
+    <p>iyileşme: {{ currentStats.recovered }}</p>
+</div>
+
+<div *ngIf="countriesDays && worldDays"> Ülkelerin ve dünya genelinin günlük verileri</div>
+
+<table>
+    <tr *ngFor="let days of currentDays">
+        Date: {{ days.date }} Vaka: {{ days.infected }} Ölüm: {{ days.death }} İyileşme: {{ days.recovered }}
+    </tr>
+</table>
