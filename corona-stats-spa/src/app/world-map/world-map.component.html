@@ -10,9 +10,9 @@
     [value]="country.id">{{country.name}}</option>
     </select>
     <p>{{ currentCountryName }}</p> <br/>
-    <p>vaka: {{ currentStats.infected }}</p>
-    <p>ölüm: {{ currentStats.death }}</p>
-    <p>iyileşme: {{ currentStats.recovered }}</p>
+    <p *ngIf="currentStats">vaka: {{ currentStats.infected }}</p>
+    <p *ngIf="currentStats">ölüm: {{ currentStats.death }}</p>
+    <p *ngIf="currentStats">iyileşme: {{ currentStats.recovered }}</p>
 </div>
 
 <div *ngIf="countriesDays && worldDays"> Ülkelerin ve dünya genelinin günlük verileri</div>

@@ -2,15 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { StatsDaily } from '../models/StatsDaily';
 import { Country } from '../models/Country';
+import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-world-map',
   templateUrl: './world-map.component.html',
-  styleUrls: ['./world-map.component.css']
+  styleUrls: ['./world-map.component.css'],
+  providers: [ApiService]
 })
 export class WorldMapComponent implements OnInit {
 
-  constructor(private http: HttpClient) {}
+  constructor(private apiService : ApiService) {}
 
   countriesTotal: StatsDaily[];
   countries: Country[];
@@ -24,25 +26,25 @@ export class WorldMapComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getCountryTotal().subscribe((data) => {
+    this.apiService.getCountryTotal().subscribe((data) => {
       this.countriesTotal = data;
     });
 
-    this.getCountries().subscribe((data) => {
+    this.apiService.getCountries().subscribe((data) => {
       this.countries = data;
     });
 
-    this.getWorldTotal().subscribe((data) => {
+    this.apiService.getWorldTotal().subscribe((data) => {
       this.wordlTotal = data;
       this.currentStats = data;
     });
 
-    this.getWorldDays().subscribe((data) => {
+    this.apiService.getWorldDays().subscribe((data) => {
       this.worldDays = data;
       this.currentDays = data;
     })
 
-    this.getCountriesDays().subscribe((data) => {
+    this.apiService.getCountriesDays().subscribe((data) => {
       this.countriesDays = data;
     })
   }
@@ -68,26 +70,6 @@ export class WorldMapComponent implements OnInit {
     }
   }
 
-  getCountryTotal() {
-    return this.http.get<StatsDaily[]>(
-      'http://localhost:8080/api/countrytotal'
-    );
-  }
-
-  getCountries() {
-    return this.http.get<Country[]>('http://localhost:8080/api/countries');
-  }
-
-  getWorldTotal() {
-    return this.http.get<StatsDaily>('http://localhost:8080/api/worldtotal');
-  }
-
-  getWorldDays() {
-    return this.http.get<StatsDaily[]>('http://localhost:8080/api/worldtotaldays');
-  }
-
-  getCountriesDays() {
-    return this.http.get<StatsDaily[]>('http://localhost:8080/api/countrytotaldays');
-  }
+  
 
 }
