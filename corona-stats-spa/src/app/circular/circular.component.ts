@@ -7,8 +7,7 @@ import { ApiService } from '../services/api.service';
 @Component({
   selector: 'app-circular',
   templateUrl: './circular.component.html',
-  styleUrls: ['./circular.component.css'],
-  providers: [ApiService]
+  styleUrls: ['./circular.component.css']
 })
 export class CircularComponent implements OnInit {
   constructor(private apiService : ApiService) {}

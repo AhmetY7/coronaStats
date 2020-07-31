@@ -6,8 +6,7 @@ import { ApiService } from '../services/api.service';
 @Component({
   selector: 'app-table-info',
   templateUrl: './table-info.component.html',
-  styleUrls: ['./table-info.component.css'],
-  providers: [ApiService]
+  styleUrls: ['./table-info.component.css']
 })
 export class TableInfoComponent implements OnInit {
 

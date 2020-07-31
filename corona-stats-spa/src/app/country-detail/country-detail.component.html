@@ -1,3 +1,58 @@
-<p>
-  country-detail works!
-</p>
+<form [formGroup] = "statOperation" (ngSubmit)="applyOperation()" class="form-group">
+      <input type="date"
+      class="form-control"
+      id="dateId"
+      name="tarih"
+      placeholder="Tarih"
+      [(ngModel)]="date"
+      formControlName = "date"
+    />
+    <div class="alert alert-danger" *ngIf="statOperation.get('date').hasError('required') && statOperation.get('date').touched">Hatalı Giriş!</div>
+    <input type="text"
+      class="form-control"
+      id="deathId"
+      name="olum"
+      placeholder="Ölüm Sayısı"
+      [(ngModel)]="death"
+      formControlName = "death"
+    />
+    <div class="alert alert-danger" *ngIf="statOperation.get('death').hasError('required') && statOperation.get('death').touched">Hatalı Giriş!</div>
+      <input type="text"
+      class="form-control"
+      id="infectedId"
+      name="vaka"
+      placeholder="Vaka Sayısı"
+      [(ngModel)]="infected"
+      formControlName = "infected"
+    />
+    <div class="alert alert-danger" *ngIf="statOperation.get('infected').hasError('required') && statOperation.get('infected').touched">Hatalı Giriş!</div>
+    <input type="text"
+      class="form-control"
+      id="recoveredId"
+      name="iyi"
+      placeholder="İyileşen Sayısı"
+      [(ngModel)]="recovered"
+      formControlName = "recovered"
+    />
+    <div class="alert alert-danger" *ngIf="statOperation.get('recovered').hasError('required') && statOperation.get('recovered').touched">Hatalı Giriş!</div>
+    <button type="submit" class="btn btn-primary" [disabled]="statOperation.invalid">Kaydet</button> - <a class="btn btn-primary" (click)="clear()">Temizle(Yeni Kayıt için)</a>
+  
+</form>
+
+<table>
+  <tr>
+    <td>Tarih</td>
+    <td>Vaka</td>
+    <td>Ölüm</td>
+    <td>İyileşme</td>
+    <td></td>
+  </tr>
+  <tr *ngFor="let stat of stats">
+    <td>{{ stat.date }}</td>
+    <td>{{ stat.infected }}</td>
+    <td>{{ stat.death }}</td>
+    <td>{{ stat.recovered }}</td>
+    <td><a class="btn btn-primary" (click)="statSelect(stat)">Düzenle</a> - <a class="btn btn-primary" (click)="delete(stat)">Sil</a></td>
+  </tr>
+</table>
+

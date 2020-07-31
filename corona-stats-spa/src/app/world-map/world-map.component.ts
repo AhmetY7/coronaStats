@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { StatsDaily } from '../models/StatsDaily';
 import { Country } from '../models/Country';
 import { ApiService } from '../services/api.service';
@@ -7,8 +6,7 @@ import { ApiService } from '../services/api.service';
 @Component({
   selector: 'app-world-map',
   templateUrl: './world-map.component.html',
-  styleUrls: ['./world-map.component.css'],
-  providers: [ApiService]
+  styleUrls: ['./world-map.component.css']
 })
 export class WorldMapComponent implements OnInit {
 

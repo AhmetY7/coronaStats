@@ -36,4 +36,22 @@ export class ApiService {
       'http://localhost:8080/api/countrytotaldays'
     );
   }
+
+  getStatByCountryId(statsCountryId) {
+    return this.http.get<StatsDaily[]>(
+      'http://localhost:8080/api/statscountryid/' + statsCountryId
+    );
+  }
+
+  save(stat:StatsDaily) {
+    this.http.post("http://localhost:8080/api/add",stat).subscribe();
+  }
+
+  update(stat:StatsDaily) {
+    this.http.post("http://localhost:8080/api/update",stat).subscribe();
+  }
+
+  delete(stat:StatsDaily) {
+    this.http.post("http://localhost:8080/api/delete",stat).subscribe();
+  }
 }

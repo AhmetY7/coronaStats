@@ -18,7 +18,8 @@ import { CountryDetailComponent } from './country-detail/country-detail.componen
 import { AccountService } from './services/account.service';
 import { LoginGuard } from './login/login.guard';
 import { ApiService } from './services/api.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CountryFilterPipe } from './country-list/country-filter.pipe';
 
 @NgModule({
    declarations: [
@@ -31,14 +32,16 @@ import { FormsModule } from '@angular/forms';
       LoginComponent,
       CountryListComponent,
       HomeComponent,
-      CountryDetailComponent
+      CountryDetailComponent,
+      CountryFilterPipe
    ],
    imports: [
       BrowserModule,
       AppRoutingModule,
       HttpClientModule,
       FormsModule,
-      RouterModule.forRoot(appRoutes)
+      RouterModule.forRoot(appRoutes), 
+      ReactiveFormsModule
    ],
    providers: [AccountService, LoginGuard, ApiService],
    bootstrap: [

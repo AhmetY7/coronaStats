@@ -42,7 +42,7 @@ public class HibernateStatsDailyDal implements IStatsDailyDal {
 	@Transactional
 	public List<StatsDaily> getByCountryId(int countryId) {
 		Session session = entityManager.unwrap(Session.class);
-		List<StatsDaily> statsOfCountry = session.createQuery("from StatsDaily s where s.countryId= :countryId", StatsDaily.class).setParameter("countryId", countryId).getResultList();
+		List<StatsDaily> statsOfCountry = session.createQuery("from StatsDaily s where s.countryId= :countryId  ORDER BY s.date", StatsDaily.class).setParameter("countryId", countryId).getResultList();
 		return statsOfCountry;
 	}
 	
