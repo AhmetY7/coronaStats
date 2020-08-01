@@ -1,15 +1,20 @@
-<p>Tablo</p>
-<table *ngIf="countries" >
-    <tr>
-        <td>ÜLKE</td>
-        <td>VAKA</td>
-        <td>ÖLÜM</td>
-        <td>İYİLEŞME</td>
-    </tr>
-    <tr *ngFor="let country of countriesTotal"> 
-        <td>{{countries[country.countryId-1].name}}</td>
-        <td>{{country.infected}}</td>
-        <td>{{country.death}}</td>
-        <td>{{country.recovered}}</td>
-    </tr>
-</table>
+<div class="d-flex justify-content-center table-wrapper-scroll-y my-custom-scrollbar mt-3">
+    <table *ngIf="countries" class="table">
+        <thead>
+            <tr>
+                <th scope="col">ÜLKE</th>
+                <th scope="col">VAKA</th>
+                <th scope="col">ÖLÜM</th>
+                <th scope="col">İYİLEŞME</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let country of countriesTotal"> 
+                <td>{{countries[country.countryId-1].name}}</td>
+                <td class="text-danger" >{{country.infected}}</td>
+                <td class="text-secondary">{{country.death}}</td>
+                <td class="text-success">{{country.recovered}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

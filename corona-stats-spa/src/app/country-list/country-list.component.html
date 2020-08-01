@@ -1,28 +1,32 @@
-<div class="form-group">
-  <input
-    class="form-control"
-    id="countryName"
-    placeholder="Ülke Ara"
-    [(ngModel)]="filterText"
-  />
-  <small id="emailHelp" class="form-text text-muted"
-    >We'll never share your email with anyone else.</small
-  >
+<div class="container">
+  <div class="form-group mt-3">
+    <input
+      class="form-control"
+      id="countryName"
+      placeholder="Ülke Ara"
+      [(ngModel)]="filterText"
+    />
+  </div>
+  <div class="d-flex justify-content-center">
+  <table *ngIf="countriesTotal && countries" class="table table-dark">
+    <thead>
+      <tr>
+        <th scope="col">ÜLKE</th>
+        <th scope="col">VAKA</th>
+        <th scope="col">ÖLÜM</th>
+        <th scope="col">İYİLEŞME</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let country of countriesTotal | countryFilter:countries:filterText">
+        <td>{{ countries[country.countryId - 1].name }}</td>
+        <td>{{ country.infected }}</td>
+        <td>{{ country.death }}</td>
+        <td>{{ country.recovered }}</td>
+        <td><a class="btn btn-primary" routerLink="/countryDetail/{{country.countryId}}" routerLinkActive="active">Seç</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
 </div>
-
-<table *ngIf="countriesTotal && countries">
-  <tr>
-    <td>ÜLKE</td>
-    <td>VAKA</td>
-    <td>ÖLÜM</td>
-    <td>İYİLEŞME</td>
-    <td></td>
-  </tr>
-  <tr *ngFor="let country of countriesTotal | countryFilter:countries:filterText">
-    <td>{{ countries[country.countryId - 1].name }}</td>
-    <td>{{ country.infected }}</td>
-    <td>{{ country.death }}</td>
-    <td>{{ country.recovered }}</td>
-    <td><a class="btn btn-primary" routerLink="/countryDetail/{{country.countryId}}" routerLinkActive="active">Seç</a></td>
-  </tr>
-</table>

@@ -1,24 +1,34 @@
-<div>
-    <p>Ülkelerin ve dünya geneli bilgilerinin haritada gösterimi</p>
+   <p class="d-flex justify-content-center">Ülkelerin ve dünya geneli bilgilerinin haritada gösterimi</p>
+   <div class="d-flex justify-content-between">
+    <div >{{ currentCountryName }}</div>
+    <div> 
+        <select *ngIf="countriesTotal && countries && wordlTotal"
+                #mySelect
+                (change)='onOptionsSelected(mySelect.value)'>
+                <option class='option' [value]="0"> Dünya Geneli </option>
+            <option class='option' 
+            *ngFor='let country of countries' 
+            [value]="country.id">{{country.name}}</option>
+            </select>
+        </div>
+    </div>
+    <br/>
+    <div *ngIf="currentStats" class="d-flex justify-content-center"> 
+        <table>
+            <tr>vaka: {{ currentStats.infected }}</tr>
+            <tr>ölüm: {{ currentStats.death }}</tr>
+            <tr>iyileşme: {{ currentStats.recovered }}</tr>
+        </table>
+    </div>
 
-    <select *ngIf="countriesTotal && countries && wordlTotal" class='select-option'
-        #mySelect
-        (change)='onOptionsSelected(mySelect.value)'>
-        <option class='option' [value]="0"> Dünya Geneli </option>
-    <option class='option' 
-    *ngFor='let country of countries' 
-    [value]="country.id">{{country.name}}</option>
-    </select>
-    <p>{{ currentCountryName }}</p> <br/>
-    <p *ngIf="currentStats">vaka: {{ currentStats.infected }}</p>
-    <p *ngIf="currentStats">ölüm: {{ currentStats.death }}</p>
-    <p *ngIf="currentStats">iyileşme: {{ currentStats.recovered }}</p>
+
+<div *ngIf="countriesDays && worldDays" class="d-flex justify-content-center"> Ülkelerin ve dünya genelinin günlük verileri</div>
+
+<div class="d-flex justify-content-center">
+    <table >
+        <tr *ngFor="let days of currentDays">
+            Date: {{ days.date }} Vaka: {{ days.infected }} Ölüm: {{ days.death }} İyileşme: {{ days.recovered }}
+        </tr>
+    </table>
 </div>
 
-<div *ngIf="countriesDays && worldDays"> Ülkelerin ve dünya genelinin günlük verileri</div>
-
-<table>
-    <tr *ngFor="let days of currentDays">
-        Date: {{ days.date }} Vaka: {{ days.infected }} Ölüm: {{ days.death }} İyileşme: {{ days.recovered }}
-    </tr>
-</table>
