@@ -1,25 +1,63 @@
-   <p class="d-flex justify-content-center">Ülkelerin ve dünya geneli bilgilerinin haritada gösterimi</p>
-   <div class="d-flex justify-content-between">
-    <div >{{ currentCountryName }}</div>
-    <div> 
-        <select *ngIf="countriesTotal && countries && wordlTotal"
+<div class="row mt-2">
+    <div [(innerHtml)]="currentCountry.name" class="col-6"></div>
+
+
+    <div class="col-6 "> 
+        <select class="float-right" [(ngModel)]="currentCountry.id" *ngIf="countriesTotal && countries && wordlTotal"
                 #mySelect
                 (change)='onOptionsSelected(mySelect.value)'>
-                <option class='option' [value]="0"> Dünya Geneli </option>
+                <option class='option' [selected]="currentCountry.id" [value] = "currentCountry.id"> {{currentCountry.name}}</option>
+                <option class='option' [value]="0"> Dünya Geneli</option>
             <option class='option' 
             *ngFor='let country of countries' 
-            [value]="country.id">{{country.name}}</option>
+            [value]="country.id">{{country.name}} </option>
             </select>
         </div>
     </div>
-    <br/>
-    <div *ngIf="currentStats" class="d-flex justify-content-center"> 
+
+
+<!--  <label *ngFor='let country of countries'>{{ country.name }}</label> -->
+    <div *ngIf="currentStats" class="row mt-2"> 
+        <div class="col-sm-4">
+            <div class="card text-white bg-danger">
+              <div class="card-body">
+                <h5 class="card-title">Vaka</h5>
+                <p class="card-text"> {{ currentStats.infected }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card text-white bg-secondary">
+              <div class="card-body">
+                <h5 class="card-title">Ölüm</h5>
+                <p class="card-text" [(innerHtml)]="currentStats.death"></p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card text-white bg-success">
+              <div class="card-body">
+                <h5 class="card-title">İyileşme</h5>
+                <p class="card-text" [(innerHtml)]="currentStats.recovered"></p>
+              </div>
+            </div>
+          </div>
+          <!-- 
         <table>
-            <tr>vaka: {{ currentStats.infected }}</tr>
-            <tr>ölüm: {{ currentStats.death }}</tr>
-            <tr>iyileşme: {{ currentStats.recovered }}</tr>
-        </table>
+            <tr [(innerHtml)]="'Vaka: ' + currentStats.infected"></tr>
+            <tr [(innerHtml)]="'Ölüm: ' + currentStats.death"></tr>
+            <tr [(innerHtml)]="'İyileşme: ' + currentStats.recovered"></tr>
+        </table> -->
     </div>
+    <div class="mt-2">
+      <div id="chartdiv"></div>
+    </div>
+
+<!-- 
+   <p class="d-flex justify-content-center">Ülkelerin ve dünya geneli bilgilerinin haritada gösterimi</p>
+   
+    <br/>
+    
 
 
 <div *ngIf="countriesDays && worldDays" class="d-flex justify-content-center"> Ülkelerin ve dünya genelinin günlük verileri</div>
@@ -31,4 +69,4 @@
         </tr>
     </table>
 </div>
-
+-->

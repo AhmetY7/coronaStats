@@ -20,6 +20,8 @@ import { LoginGuard } from './login/login.guard';
 import { ApiService } from './services/api.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CountryFilterPipe } from './country-list/country-filter.pipe';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 @NgModule({
    declarations: [
@@ -41,7 +43,8 @@ import { CountryFilterPipe } from './country-list/country-filter.pipe';
       HttpClientModule,
       FormsModule,
       RouterModule.forRoot(appRoutes), 
-      ReactiveFormsModule
+      ReactiveFormsModule,
+      BrowserAnimationsModule
    ],
    providers: [AccountService, LoginGuard, ApiService],
    bootstrap: [

@@ -65,7 +65,7 @@ public class HibernateStatsDailyDal implements IStatsDailyDal {
 	@Transactional
 	public List<StatsDaily> countryTotal() {
 		Session session = entityManager.unwrap(Session.class);
-		List<Object[]> countryTotalObject = session.createQuery("select s.id, s.countryId, s.date, SUM(s.infected) as infected,SUM(s.recovered) as recovered,SUM(s.death) as death from StatsDaily s GROUP BY s.countryId ORDER BY s.infected DESC", Object[].class).getResultList();
+		List<Object[]> countryTotalObject = session.createQuery("select s.id, s.countryId, s.date, SUM(s.infected) as infected,SUM(s.recovered) as recovered,SUM(s.death) as death from StatsDaily s GROUP BY s.countryId ORDER BY infected DESC", Object[].class).getResultList();
 		List<StatsDaily> countryTotal = new ArrayList<>();
 		for(Object[] row : countryTotalObject) {
 			StatsDaily stats = new StatsDaily();

@@ -19,18 +19,54 @@ public class Country {
 	@Column(name="name")
 	private String name;
 	
-	public Country(int id, String name) {
+	@Column(name="latitude")
+	private double latitude;
+	
+	@Column(name="longitude")
+	private double longitude;
+	
+	@Column(name="code")
+	private String code;
+	
+	public Country(int id, String name, double latitude, double longitude, String code) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.code = code;
 	}
 	
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+
 	public Country() {
 		
 	}
 	public int getId() {
 		return id;
 	}
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
