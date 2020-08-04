@@ -21,6 +21,7 @@ import { ApiService } from './services/api.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CountryFilterPipe } from './country-list/country-filter.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgApexchartsModule } from "ng-apexcharts";
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
       FormsModule,
       RouterModule.forRoot(appRoutes), 
       ReactiveFormsModule,
-      BrowserAnimationsModule
+      BrowserAnimationsModule,
+      NgApexchartsModule
    ],
    providers: [AccountService, LoginGuard, ApiService],
    bootstrap: [

@@ -1,9 +1,7 @@
 <div class="row mt-2">
-    <div [(innerHtml)]="currentCountry.name" class="col-6"></div>
-
-
+    <div class="text-dark col-6"><h4>{{ currentCountry.name }}</h4> </div>
     <div class="col-6 "> 
-        <select class="float-right" [(ngModel)]="currentCountry.id" *ngIf="countriesTotal && countries && wordlTotal"
+        <select class="form-control float-right" [(ngModel)]="currentCountry.id" *ngIf="countriesTotal && countries && wordlTotal"
                 #mySelect
                 (change)='onOptionsSelected(mySelect.value)'>
                 <option class='option' [selected]="currentCountry.id" [value] = "currentCountry.id"> {{currentCountry.name}}</option>
@@ -18,27 +16,35 @@
 
 <!--  <label *ngFor='let country of countries'>{{ country.name }}</label> -->
     <div *ngIf="currentStats" class="row mt-2"> 
-        <div class="col-sm-4">
-            <div class="card text-white bg-danger">
-              <div class="card-body">
-                <h5 class="card-title">Vaka</h5>
+        <div class="col-sm-3">
+            <div class="card border-danger">
+              <div class="card-body text-danger">
+                <h5 class="card-title">Toplam Vaka</h5>
                 <p class="card-text"> {{ currentStats.infected }}</p>
               </div>
             </div>
           </div>
-          <div class="col-sm-4">
-            <div class="card text-white bg-secondary">
-              <div class="card-body">
-                <h5 class="card-title">Ölüm</h5>
-                <p class="card-text" [(innerHtml)]="currentStats.death"></p>
+          <div class="col-sm-3">
+            <div class="card border-warning">
+              <div class="card-body text-warning">
+                <h5 class="card-title">Aktif Vakalar</h5>
+                <p class="card-text"> {{ activeCase }}</p>
               </div>
             </div>
           </div>
-          <div class="col-sm-4">
-            <div class="card text-white bg-success">
-              <div class="card-body">
+          <div class="col-sm-3">
+            <div class="card border-secondary">
+              <div class="card-body text-secondary">
+                <h5 class="card-title">Ölüm</h5>
+                <p class="card-text"> {{ currentStats.death }} </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <div class="card border-success">
+              <div class="card-body text-success">
                 <h5 class="card-title">İyileşme</h5>
-                <p class="card-text" [(innerHtml)]="currentStats.recovered"></p>
+                <p class="card-text"> {{ currentStats.recovered }} </p>
               </div>
             </div>
           </div>
@@ -51,6 +57,23 @@
     </div>
     <div class="mt-2">
       <div id="chartdiv"></div>
+    </div>
+    <div class="mt-2">
+      <div id="chart">
+        <apx-chart
+          [series]="chartOptions.series"
+          [chart]="chartOptions.chart"
+          [xaxis]="chartOptions.xaxis"
+          [stroke]="chartOptions.stroke"
+          [colors]="chartOptions.colors"
+          [dataLabels]="chartOptions.dataLabels"
+          [legend]="chartOptions.legend"
+          [markers]="chartOptions.markers"
+          [grid]="chartOptions.grid"
+          [yaxis]="chartOptions.yaxis"
+          [title]="chartOptions.title"
+        ></apx-chart>
+      </div>
     </div>
 
 <!-- 

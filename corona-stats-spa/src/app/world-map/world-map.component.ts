@@ -1,12 +1,40 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { StatsDaily } from '../models/StatsDaily';
 import { Country } from '../models/Country';
 import { ApiService } from '../services/api.service';
+
+import {
+  ChartComponent,
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexDataLabels,
+  ApexStroke,
+  ApexMarkers,
+  ApexYAxis,
+  ApexGrid,
+  ApexTitleSubtitle,
+  ApexLegend
+} from "ng-apexcharts";
 
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4maps from '@amcharts/amcharts4/maps';
 import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
+
+export type ChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  xaxis: ApexXAxis;
+  stroke: ApexStroke;
+  dataLabels: ApexDataLabels;
+  markers: ApexMarkers;
+  colors: string[];
+  yaxis: ApexYAxis;
+  grid: ApexGrid;
+  legend: ApexLegend;
+  title: ApexTitleSubtitle;
+};
 
 @Component({
   selector: 'app-world-map',
@@ -14,12 +42,15 @@ import am4themes_animated from '@amcharts/amcharts4/themes/animated';
   styleUrls: ['./world-map.component.css'],
 })
 export class WorldMapComponent implements OnInit {
+  @ViewChild("chartTimeLine") chartTimeLine: ChartComponent;
+  public chartOptions: Partial<ChartOptions>;
   constructor(
     private apiService: ApiService,
     private zone: NgZone,
   ) {
     this.currentCountry.name = 'Dünya Geneli';
     this.currentCountry.id = 0;
+    
   }
 
   countriesTotal: StatsDaily[];
@@ -27,6 +58,7 @@ export class WorldMapComponent implements OnInit {
   wordlTotal: StatsDaily;
   countriesDays: StatsDaily[];
   worldDays: StatsDaily[];
+  activeCase:number;
 
   currentStats: StatsDaily = new StatsDaily();
   currentDays: StatsDaily[];
@@ -55,18 +87,14 @@ export class WorldMapComponent implements OnInit {
             let chart = am4core.create('chartdiv', am4maps.MapChart);
             chart.geodata = am4geodata_worldLow;
             
-            /* Set projection */
             chart.projection = new am4maps.projections.Miller();
 
-            /* Create map polygon series */
             this.polygonSeries = chart.series.push(
               new am4maps.MapPolygonSeries()
             );
 
-            /* Make map load polygon (like country names) data from GeoJSON */
             this.polygonSeries.useGeodata = true;
 
-            /* Configure series */
             this.polygonTemplate = this.polygonSeries.mapPolygons.template;
             this.polygonTemplate.togglable = true;
             //polygonTemplate.tooltipText = "{name}";
@@ -81,11 +109,6 @@ export class WorldMapComponent implements OnInit {
             
             this.polygonTemplate.events.on('hit', function (ev) {
               if (selectMethod.lastSelected) {
-                // This line serves multiple purposes:
-                // 1. Clicking a country twice actually de-activates, the line below
-                //    de-activates it in advance, so the toggle then re-activates, making it
-                //    appear as if it was never de-activated to begin with.
-                // 2. Previously activated countries should be de-activated.
                 selectMethod.lastSelected.isActive = false;
               }
               ev.target.series.chart.zoomToMapObject(ev.target);
@@ -99,24 +122,18 @@ export class WorldMapComponent implements OnInit {
                   }
                 }
               }
-
             });
-            
 
-            /* Create selected and hover states and set alternative fill color */
             let ss = this.polygonTemplate.states.create('active');
             ss.properties.fill = chart.colors.getIndex(0);
 
-            // Hide Antarctica
             this.polygonSeries.exclude = ['AQ'];
 
             chart.smallMap = new am4maps.SmallMap();
-            // Re-position to top right (it defaults to bottom left)
             chart.smallMap.align = "right";
             chart.smallMap.valign = "top";
             chart.smallMap.series.push(this.polygonSeries);
 
-            // Zoom control
             chart.zoomControl = new am4maps.ZoomControl();
             
             let homeButton = new am4core.Button();
@@ -204,21 +221,21 @@ export class WorldMapComponent implements OnInit {
               }
             }
             
-
+            this.activeCase = this.currentStats.infected - (this.currentStats.death + this.currentStats.recovered);
             this.chart = chart;
         });
       });
     });
+    
 
     this.apiService.getWorldDays().subscribe((data) => {
       this.worldDays = data;
       this.currentDays = data;
-    });
-
-    this.apiService.getCountriesDays().subscribe((data) => {
-      this.countriesDays = data;
-    });
-    
+      this.apiService.getCountriesDays().subscribe((data2) => {
+        this.countriesDays = data2;
+        this.timeLineData();
+      });
+    }); 
   }
 
   ngOnDestroy() {
@@ -227,6 +244,112 @@ export class WorldMapComponent implements OnInit {
         this.chart.dispose();
       }
     });
+  }
+
+  timeLineData() {
+    let dataInfected:number[] = [];
+    let dataDeath:number[] = [];
+    let dataRecovered:number[] = [];
+    let dataDate:Date[] = [];
+    let dataActive:number[] = [];
+    let maxLimit:number;
+    if(this.currentCountry.id == 0) {
+      for(let i=0; i<this.worldDays.length; i++) {
+        dataInfected.push(this.worldDays[i].infected);
+        dataDeath.push(this.worldDays[i].death);
+        dataRecovered.push(this.worldDays[i].recovered);
+        dataDate.push(this.worldDays[i].date);
+        dataActive.push(this.worldDays[i].infected - (this.worldDays[i].death + this.worldDays[i].recovered));
+        maxLimit = this.worldDays[this.worldDays.length-1].infected;
+      }
+    } else {
+      for(let i=0; i<this.countriesDays.length; i++) {
+        if(this.countriesDays[i].countryId == this.currentCountry.id) {
+          dataInfected.push(this.countriesDays[i].infected);
+          dataDeath.push(this.countriesDays[i].death);
+          dataRecovered.push(this.countriesDays[i].recovered);
+          dataDate.push(this.countriesDays[i].date);
+          dataActive.push(this.countriesDays[i].infected - (this.countriesDays[i].death + this.countriesDays[i].recovered));
+          maxLimit = this.countriesDays[i].infected;
+        }
+      }
+    }
+    this.chartOptions = {
+      series: [
+        {
+          name: "Toplam Vaka",
+          data: dataInfected
+        },
+        {
+          name: "Aktif Vaka",
+          data: dataActive
+        },
+        {
+          name: "Ölüm",
+          data: dataDeath
+        },
+        {
+          name: "İyileşme",
+          data: dataRecovered
+        }
+      ],
+      chart: {
+        height: 350,
+        type: "line",
+        dropShadow: {
+          enabled: true,
+          color: "#000",
+          top: 18,
+          left: 7,
+          blur: 10,
+          opacity: 0.2
+        },
+        toolbar: {
+          show: false
+        }
+      },
+      colors: ["#EE4949","#FFB266", "#959191", "#66FF66"],
+      dataLabels: {
+        enabled: true
+      },
+      stroke: {
+        curve: "smooth"
+      },
+      title: {
+        text: this.currentCountry.name,
+        align: "left"
+      },
+      grid: {
+        borderColor: "#e7e7e7",
+        row: {
+          colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+          opacity: 0.5
+        }
+      },
+      markers: {
+        size: 1
+      },
+      xaxis: {
+        categories: dataDate,
+        title: {
+          text: "Day"
+        }
+      },
+      yaxis: {
+        title: {
+          text: "Rakamlar"
+        },
+        min: 0,
+        max: maxLimit
+      },
+      legend: {
+        position: "top",
+        horizontalAlign: "right",
+        floating: true,
+        offsetY: -25,
+        offsetX: -5
+      }
+    };
   }
 
   onOptionsSelected(value: number) {
@@ -302,5 +425,7 @@ export class WorldMapComponent implements OnInit {
 
       }
     }
+    this.activeCase = this.currentStats.infected - (this.currentStats.death + this.currentStats.recovered);
+    this.timeLineData();
   }
 }
