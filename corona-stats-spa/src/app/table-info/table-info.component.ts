@@ -14,6 +14,7 @@ export class TableInfoComponent implements OnInit {
 
   countriesTotal:StatsDaily[];
   countries:Country[];
+  filterText: "";
 
   ngOnInit(): void {
     this.apiService.getCountryTotal().subscribe(data=>{

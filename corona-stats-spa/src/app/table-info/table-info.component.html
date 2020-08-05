@@ -1,4 +1,13 @@
+<div class="form-group mt-2">
+    <input
+      class="form-control"
+      id="countryName"
+      placeholder="Ülke Ara"
+      [(ngModel)]="filterText"
+    />
+  </div>
 <div class="d-flex justify-content-center table-wrapper-scroll-y my-custom-scrollbar mt-1">
+    
     <table *ngIf="countries" class="table">
         <thead>
             <tr>
@@ -9,7 +18,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let country of countriesTotal"> 
+            <tr *ngFor="let country of countriesTotal | countryFilter:countries:filterText"> 
                 <td>{{countries[country.countryId-1].name}}</td>
                 <td class="text-danger" >{{country.infected}}</td>
                 <td class="text-secondary">{{country.death}}</td>

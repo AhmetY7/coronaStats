@@ -22,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CountryFilterPipe } from './country-list/country-filter.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgApexchartsModule } from "ng-apexcharts";
+import { TableFilterPipe } from './table-info/table-filter.pipe';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { NgApexchartsModule } from "ng-apexcharts";
       CountryListComponent,
       HomeComponent,
       CountryDetailComponent,
-      CountryFilterPipe
+      CountryFilterPipe,
+      TableFilterPipe
    ],
    imports: [
       BrowserModule,
