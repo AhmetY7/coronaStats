@@ -1,4 +1,6 @@
 # Corona Stats
+<h2> Proje İçinden Resimler </h2>
+<h3> Note: Veriler otomatik veri oluşturma sitesinden oluşturulduğu için tutarsızlık olabilir. </h3> 
 
 <img src="images/006979.png">
 <br />
